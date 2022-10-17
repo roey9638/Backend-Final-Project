@@ -4,6 +4,7 @@ using System;
 
 namespace Reactivities.Controllers
 {
+    //This is to [test] the [API Respones] on the [client/react] side.
     public class BuggyController : BaseAPIController
     {
         [HttpGet("not-found")]

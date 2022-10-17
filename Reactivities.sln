@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reactivities", "Reactivities\Reactivities.csproj", "{7EEC582A-D375-4B6C-BFCC-DF5D3BE0D102}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reactivities", "Reactivities\Reactivities.csproj", "{7EEC582A-D375-4B6C-BFCC-DF5D3BE0D102}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAF7D813-FB11-4D67-8399-DB22BDEA82DA}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

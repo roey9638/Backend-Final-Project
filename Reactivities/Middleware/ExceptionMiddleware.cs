@@ -16,6 +16,9 @@ namespace Reactivities.Middleware
         public IHostEnvironment _env { get; }
 
 
+        //The [RequestDelegate next] [param] well [call] the [Function] [InvokeAsync] Down Here VV. Continue Down VV. 
+        //it will [call] the [Next] [Function] [after] the [UseMiddleware] [Function] In the [Startup Class]  [Inside] [Configure()] [Function].
+        //The [ILogger<ExceptionMiddleware>] is [to] [print] the [Error].
         //The [IHostEnvironmen env] [param] well [tell us] if we [In] [Development Mode] or [Production Mode]
         public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
         {
@@ -28,7 +31,7 @@ namespace Reactivities.Middleware
         {
             try
             {
-                //When a [Reques] [Comes in]. I'ts gonna [pass] [straight through] our [excptional handling middlware]. And [Continue] to the [Other] [middleware].
+                //When a [Reques] [Comes in]. I'ts gonna [pass] [straight through] our [excptional handling middlware]. And [Continue] to the [Others] [middleware].
                 //But if theres an [Exception] it will go to the [catch]
                 await _next(context);
             }
@@ -52,7 +55,7 @@ namespace Reactivities.Middleware
                     : new AppException(context.Response.StatusCode, "Server Error");
 
                 //This will [ensure] that our [Response] is in [CamelCase] [Rather] than [title Case].
-                //[Maybe Not True] --> But it will be an [Optinol]
+                //[Maybe Not True] --> But it will be an [Optional]
                 var options = new JsonSerializerOptions{ PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
                 //Here we [Conver] the [response] and the [options] to [Json].

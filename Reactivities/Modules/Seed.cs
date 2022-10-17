@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Reactivities.DataDBContext;
 using Reactivities.Modules;
 
@@ -9,8 +10,30 @@ namespace Reactivitiess.Modules
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            //This will [check] if there are any [users] [already] in our [DataBase]. [If there isn't any] it will [execute the code] in the [if statement]
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser{ DisplayName = "Bob", UserName = "bob", Email = "bob@test.com"},
+
+                    new AppUser{ DisplayName = "Tom", UserName = "tom", Email = "tom@test.com"},
+
+                    new AppUser{ DisplayName = "Jane", UserName = "jane", Email = "jane@test.com"},
+                };
+
+                foreach (var user in users)
+                {
+                    //Then [here] [we gonna] [Add] [each] [user] inside the [users List]
+                    //We Don't need to do [context.SaveChangesAsync()] in the end, [Because] The [CreateAsync] gonna [Create] the [user] [directly] in the [DataBase] and [Save]
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+
+            }
+
+
             if (context.Activities.Any())
             {
                 return;
