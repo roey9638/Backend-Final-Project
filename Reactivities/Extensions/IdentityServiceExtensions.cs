@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.DataDBContext;
 using Reactivities.Modules;
+using Reactivities.Secuirty;
 using Reactivities.Services;
+using System.Net;
 using System.Text;
 
 namespace Reactivities.Extensions
@@ -47,6 +50,17 @@ namespace Reactivities.Extensions
                         ValidateAudience = false,
                     };
                 });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsActivityHost", policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
             //This will [mean] that our [TokenService] is [available] when we [Inject] it [into] our [AccountController]. Continue Down VV
             //And it will be [Scoped] to the [life time] of the [Request] to our [API]

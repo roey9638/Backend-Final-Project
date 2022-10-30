@@ -12,6 +12,29 @@ namespace Reactivities.DataDBContext
         }
 
         public DbSet<Activity> Activities { get; set; }
+        public DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            //This is [Form] the [Primary Key] in the [Table]
+            //The [Primary Key] Is a [Combanation] of the [ aa.AppUserId] And [aa.ActivityId]
+            builder.Entity<ActivityAttendee>(x => x.HasKey(aa => new { aa.AppUserId, aa.ActivityId }));
+
+            //This is to [Build] the [Many to Many] [Relationship] of the [Tables]
+            //The [Foreign Key] of The [AppUser] [Class] will be the [AppUserId] that is from the [ActivityAttendee] [Class]
+            builder.Entity<ActivityAttendee>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.Activities)
+                .HasForeignKey(aa => aa.AppUserId);
+
+            //The [Foreign Key] of The [Activity] [Class] will be the [ActivityId] that is from the [ActivityAttendee] [Class]
+            builder.Entity<ActivityAttendee>()
+                .HasOne(u => u.Activity)
+                .WithMany(a => a.Attendees)
+                .HasForeignKey(aa => aa.ActivityId);
+        }
     }
 
 }

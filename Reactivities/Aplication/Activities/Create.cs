@@ -1,9 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Reactivities.Aplication.Core;
+using Reactivities.Aplication.Interfaces;
 using Reactivities.DataDBContext;
 using Reactivities.Modules;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,14 +34,27 @@ namespace Reactivities.Aplication.Activities
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context, IUserAccessor userAccesor)
             {
                 _context = context;
+                _userAccessor = userAccesor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+
+                var attendee = new ActivityAttendee
+                {
+                    AppUser = user,
+                    Activity = request.Activity,
+                    IsHost = true
+                };
+
+                request.Activity.Attendees.Add(attendee);
+
                 _context.Activities.Add(request.Activity);
 
                 //If [nothing] has been [writing] [into] the [Databse]. The [result] is [going] to be [False]. Continue Down VV.

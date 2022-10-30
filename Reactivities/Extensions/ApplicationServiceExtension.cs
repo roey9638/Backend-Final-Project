@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using Reactivities.Aplication.Activities;
 using Reactivities.Aplication.Core;
 using Reactivities.DataDBContext;
+using Reactivities.Aplication.Interfaces;
+using Reactivities.Secuirty;
 
 namespace Reactivities.Extensions
 {
@@ -52,6 +54,9 @@ namespace Reactivities.Extensions
             //We need to [tell this] [where our] [Mapping] is [located] and which [assembly] they [located] at. Continue Downn VV
             //In this case are [Mapping] [located] in [MappingProfiles]
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
 
             return services;

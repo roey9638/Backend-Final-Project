@@ -62,14 +62,16 @@ namespace Reactivities.Controllers
             //Here I'm [Checking] if a [New] [User] [trying] To [Register] With an [Email] that [Already] [Exist]
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
             {
-                return BadRequest("Email taken");
+                ModelState.AddModelError("email", "Email Taken");
+                return ValidationProblem();
             }
 
             //Here I'm [Checking] if a [New] [User] [trying] To [Register] With an [UserName] that [Already] [Exist]
 
             if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
             {
-                return BadRequest("UserName taken");
+                ModelState.AddModelError("userName", "UserName Taken");
+                return ValidationProblem();
             }
 
             //If The [User] that was [Trying] to [Register] With an [Email] that [Dosen't] [Already] [Exist]. [From] The the (2) [if statments] [Above] ^^. Continue Down VV
