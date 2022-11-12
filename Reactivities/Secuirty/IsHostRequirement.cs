@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Reactivities.DataDBContext;
 using System;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Reactivities.Secuirty
         private readonly DataContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        //This [Variable] [_httpContextAccessor] is to get [Access] to the [Root ID] of the [Activity] we [trying] to [Access]
         public IsHostRequirementHandler(DataContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
@@ -35,12 +37,15 @@ namespace Reactivities.Secuirty
                 return Task.CompletedTask;
             }
 
+            //The [Root ID] [Value] is [Guid]. So we did [Guid.Parse] to [Convert] is to [string]
             var activityId = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
                 .SingleOrDefault(x => x.Key == "id").Value?.ToString());
 
 
             //This [Should] [Contain] the [Activity attendee] [Object]
-            var attendee = _dbContext.ActivityAttendees.FindAsync(userId, activityId).Result;
+            var attendee = _dbContext.ActivityAttendees
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.AppUserId == userId && x.ActivityId == activityId).Result;
 
 
             if (attendee == null)
@@ -57,4 +62,6 @@ namespace Reactivities.Secuirty
             return Task.CompletedTask;
         }
     }
+
+
 }

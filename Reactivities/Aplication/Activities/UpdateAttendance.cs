@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.Aplication.Core;
 using Reactivities.Aplication.Interfaces;
 using Reactivities.DataDBContext;
+using Reactivities.Modules;
 using System;
 using System.Linq;
 using System.Threading;
@@ -25,8 +26,8 @@ namespace Reactivities.Aplication.Activities
 
             public Handler(DataContext context, IUserAccessor userAccessor)
             {
-                _userAccessor = userAccessor;
                 _context = context;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
@@ -35,11 +36,13 @@ namespace Reactivities.Aplication.Activities
                     .Include(a => a.Attendees).ThenInclude(u => u.AppUser)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
+                //Here we [check] if we [Have] an [Activity] or [Not]
                 if (activity == null)
                 {
                     return null;
                 }
 
+                //Here I'm [getting] the [User]
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
                 if (user == null)
@@ -47,8 +50,11 @@ namespace Reactivities.Aplication.Activities
                     return null;
                 }
 
+                //Here I'm [getting] the [hostUsername] of the [Activity]
                 var hostUsername = activity.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser?.UserName;
 
+
+                //Here I'm [getting] the [attendance] of the [Activity]
                 var attendance = activity.Attendees.FirstOrDefault(x => x.AppUser.UserName == user.UserName);
 
 
@@ -68,7 +74,7 @@ namespace Reactivities.Aplication.Activities
 
                 if (attendance == null)
                 {
-                    attendance = new Modules.ActivityAttendee
+                    attendance = new ActivityAttendee
                     {
                         AppUser = user,
                         Activity = activity,

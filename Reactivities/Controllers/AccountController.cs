@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.DTOs;
 using Reactivities.Modules;
 using Reactivities.Services;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -34,7 +35,8 @@ namespace Reactivities.Controllers
         {
             //In the [Table] [AspNetUsers] we have a column called [NormalizeEmail]. if the [user] gonna [send] an [Email] With [lowerCase] it's [gonna be] [compared to] the [NormalizeEmail]. Continue Down VV
             //And it's [gonna] [return] the [user object] Or [null] [which means] That the [User] [dosen't exist] in the [DataBase].
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            var user = await _userManager.Users.Include(p => p.Photos)
+                .FirstOrDefaultAsync(x => x.Email== loginDto.Email);
 
             if (user == null)
             {
@@ -101,7 +103,8 @@ namespace Reactivities.Controllers
         {
             //Here I want to [get] the [User] [By Email]
             //[Email] is [One] of the [Claiming Types] We [Sending] [with] the [Token]
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await _userManager.Users.Include(p => p.Photos)
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserObject(user);
         }
@@ -111,7 +114,7 @@ namespace Reactivities.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = null,
+                Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
                 Token = _tokenService.CreateToken(user),
                 UserName = user.UserName,
             };

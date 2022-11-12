@@ -9,6 +9,7 @@ using Reactivities.Aplication.Core;
 using Reactivities.DataDBContext;
 using Reactivities.Aplication.Interfaces;
 using Reactivities.Secuirty;
+using Reactivities.Photos;
 
 namespace Reactivities.Extensions
 {
@@ -55,8 +56,11 @@ namespace Reactivities.Extensions
             //In this case are [Mapping] [located] in [MappingProfiles]
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
-
             services.AddScoped<IUserAccessor, UserAccessor>();
+
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
 
             return services;

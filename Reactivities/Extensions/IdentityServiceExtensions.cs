@@ -22,8 +22,10 @@ namespace Reactivities.Extensions
             {
                 opt.Password.RequireNonAlphanumeric = false;
             })
+
             //This [Registers] are [user stores] and are [role stores] with our [application]
             .AddEntityFrameworkStores<DataContext>()
+
             //This [Provides] the [API] for [User Sign In]
             .AddSignInManager<SignInManager<AppUser>>();
 

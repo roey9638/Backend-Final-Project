@@ -1,4 +1,8 @@
-﻿namespace Reactivities.Aplication.Profiles
+﻿using Reactivities.Aplication.Activities;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Reactivities.Aplication.Profiles
 {
     public class Profile
     {
@@ -6,5 +10,7 @@
         public string DisplayName { get; set; }
         public string Bio { get; set; }
         public string Image { get; set; }
+        public ICollection<Photo> Photos { get; set; }
+
     }
 }
