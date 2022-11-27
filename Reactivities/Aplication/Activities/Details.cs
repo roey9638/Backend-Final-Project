@@ -3,10 +3,9 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Aplication.Core;
+using Reactivities.Aplication.Interfaces;
 using Reactivities.DataDBContext;
-using Reactivities.Modules;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,13 +23,15 @@ namespace Reactivities.Aplication.Activities
         public class Handler : IRequestHandler<Query, Result<ActivityDto>>
         {
             private readonly DataContext _context;
-
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
 
 
@@ -40,7 +41,8 @@ namespace Reactivities.Aplication.Activities
             {
                 //This [request.Id] is coming from the [Query class] that we [created] Above^^.
                 var activity = await _context.Activities
-                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUsername() })
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 //Here I'm sending the [activity] to the [Success()] [function] Inside the [Result class].

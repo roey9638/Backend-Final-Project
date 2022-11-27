@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Reactivities.Aplication.Activities;
 using Reactivities.Extensions;
 using Reactivities.Middleware;
+using Reactivities.SignalR;
 using System.Net;
 
 namespace Reactivities
@@ -72,6 +73,7 @@ namespace Reactivities
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }

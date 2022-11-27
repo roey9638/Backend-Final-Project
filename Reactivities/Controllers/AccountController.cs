@@ -30,18 +30,16 @@ namespace Reactivities.Controllers
 
         //To [allow] [users] to be [Able] to [log In]. [They'll] [need] to be [able] [to hit] [this] [Endpoint] [Anonymously]. Continue Down VV
         //To [Allow] that, In the [Top] of This [Class ^^] We [Added] an [Attribute] -> [AllowAnonymous].
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             //In the [Table] [AspNetUsers] we have a column called [NormalizeEmail]. if the [user] gonna [send] an [Email] With [lowerCase] it's [gonna be] [compared to] the [NormalizeEmail]. Continue Down VV
             //And it's [gonna] [return] the [user object] Or [null] [which means] That the [User] [dosen't exist] in the [DataBase].
             var user = await _userManager.Users.Include(p => p.Photos)
-                .FirstOrDefaultAsync(x => x.Email== loginDto.Email);
+                .FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+            if (user == null) return Unauthorized("Invalid email");
 
             //The [CheckPasswordSignInAsync] needs [3 Params]
             //[Param 1] The [user]. He needs to know who is the [user] that [trying] to [logIn]
@@ -51,28 +49,27 @@ namespace Reactivities.Controllers
 
             if (result.Succeeded)
             {
-               return CreateUserObject(user);
+                return CreateUserObject(user);
             }
 
-            return Unauthorized();
+            return Unauthorized("Invalid password");
         }
 
-
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             //Here I'm [Checking] if a [New] [User] [trying] To [Register] With an [Email] that [Already] [Exist]
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
             {
-                ModelState.AddModelError("email", "Email Taken");
+                ModelState.AddModelError("email", "Email taken");
                 return ValidationProblem();
             }
 
             //Here I'm [Checking] if a [New] [User] [trying] To [Register] With an [UserName] that [Already] [Exist]
-
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
             {
-                ModelState.AddModelError("userName", "UserName Taken");
+                ModelState.AddModelError("username", "Username taken");
                 return ValidationProblem();
             }
 
@@ -82,7 +79,7 @@ namespace Reactivities.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.UserName,
+                UserName = registerDto.Username
             };
 
             //Here I'm [Adding] the new [user] to the [DataBase]
@@ -116,7 +113,7 @@ namespace Reactivities.Controllers
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
                 Token = _tokenService.CreateToken(user),
-                UserName = user.UserName,
+                Username = user.UserName
             };
         }
     }

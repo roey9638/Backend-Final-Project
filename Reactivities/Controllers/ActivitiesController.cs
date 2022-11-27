@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Aplication.Activities;
+using Reactivities.Aplication.Core;
 using Reactivities.Modules;
 using System;
 using System.Threading.Tasks;
@@ -10,14 +11,14 @@ namespace Reactivitiess.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> GetActivities()
+        public async Task<IActionResult> GetActivities([FromQuery] ActivityParams param)
         {
             //This will (Get) the [Query] which in this case a [Get methood] like [CRUD]. Continue Down VV.
             //[Maybe Not True] --> and will get the [Query] From the [List Class] that we created.
             //We get The [Mediator] from the [BaseAPIController] the this [class] is [inherating]. The explanation for him his [in that class]
             //[Impotant] --> This [Send()] is like and [HttpRequest]!!! Continue Down vv
             //[Impotant] --> And its Gonna [send it] to the [Mediator Handler] that in out [List class] that we created.
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandlePagedResult(await Mediator.Send(new List.Query { Params = param}));
         }
 
         [HttpGet("{id}")]
