@@ -1,7 +1,5 @@
 ﻿namespace Reactivities.Aplication.Core
 {
-
-    //This [class] is going to be [used] for [any] of [our] [Entities]. That's why we  Make it a [Generic / <T>]
     public class Result<T>
     {
         public bool IsSuccess { get; set; }

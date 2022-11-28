@@ -41,7 +41,6 @@ namespace Reactivities.Photos
                     return null;
                 }
 
-                //Here I'm [trying] to [Add] the [Photo] to [Cloudinary]. It will [throw] and [Exception] if it [Failed]
                 var photoUploadResult = await _photoAccessor.AddPhoto(request.File);
 
                 var photo = new Photo
@@ -50,7 +49,6 @@ namespace Reactivities.Photos
                     Id = photoUploadResult.PublicId
                 };
 
-                //Here [I'm] [Checking] if the [User] has any [Photo] that [already] [set] to [Main]
                 if (!user.Photos.Any(x => x.IsMain))
                 {
                     photo.IsMain = true;

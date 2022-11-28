@@ -36,13 +36,11 @@ namespace Reactivities.Aplication.Activities
                     .Include(a => a.Attendees).ThenInclude(u => u.AppUser)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                //Here we [check] if we [Have] an [Activity] or [Not]
                 if (activity == null)
                 {
                     return null;
                 }
 
-                //Here I'm [getting] the [User]
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
                 if (user == null)
@@ -50,27 +48,19 @@ namespace Reactivities.Aplication.Activities
                     return null;
                 }
 
-                //Here I'm [getting] the [hostUsername] of the [Activity]
                 var hostUsername = activity.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser?.UserName;
 
-
-                //Here I'm [getting] the [attendance] of the [Activity]
                 var attendance = activity.Attendees.FirstOrDefault(x => x.AppUser.UserName == user.UserName);
 
-
-                //This [means] that the [User] that making this [Request] is the [Host]
                 if (attendance != null && hostUsername == user.UserName)
                 {
                     activity.IsCancelled = !activity.IsCancelled;
                 }
 
-
-                //This [means] that the [User] that making this [Request] is [Not] the [Host]
                 if (attendance != null && hostUsername != user.UserName)
                 {
                     activity.Attendees.Remove(attendance);
                 }
-
 
                 if (attendance == null)
                 {

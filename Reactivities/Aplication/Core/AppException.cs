@@ -9,8 +9,8 @@
             Details = details;
         }
 
-        public int StatusCode { get; set; } //This is the [Error Code] basically.
-        public string Message { get; set; } //This will be the [Standart Message] for [Example] -> [Server Error].
-        public string Details { get; set; } // This is the [Stack Trace] From the [Exception].
+        public int StatusCode { get; set; } 
+        public string Message { get; set; } 
+        public string Details { get; set; } 
     }
 }

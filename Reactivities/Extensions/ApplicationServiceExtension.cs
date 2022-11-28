@@ -15,7 +15,6 @@ namespace Reactivities.Extensions
 {
     public static class ApplicationServiceExtension
     {
-        //The [this IServiceCollection] makes it an [Extension] [Methood].
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
 
@@ -34,7 +33,6 @@ namespace Reactivities.Extensions
 
 
 
-            //All of this will allow us to do any [CRUD] [methood] from the [React] which is [localhost:3000]
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", policy =>
@@ -48,16 +46,8 @@ namespace Reactivities.Extensions
             });
 
 
-
-            //For the [Mediator] to work. We added him as a [service]
-            //We need to [tell this] [where our] [handlers] are [located] and which [assembly] they [located] at. Continue Downn VV
-            //In this case are [handlers] [located] in [List.Handler]
             services.AddMediatR(typeof(List.Handler).Assembly);
 
-
-
-            //We need to [tell this] [where our] [Mapping] is [located] and which [assembly] they [located] at. Continue Downn VV
-            //In this case are [Mapping] [located] in [MappingProfiles]
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             services.AddScoped<IUserAccessor, UserAccessor>();

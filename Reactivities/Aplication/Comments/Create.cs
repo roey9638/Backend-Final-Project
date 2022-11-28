@@ -6,7 +6,6 @@ using Reactivities.Aplication.Activities;
 using Reactivities.Aplication.Core;
 using Reactivities.Aplication.Interfaces;
 using Reactivities.DataDBContext;
-using Reactivities.Secuirty;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

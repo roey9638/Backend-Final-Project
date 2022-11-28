@@ -14,8 +14,6 @@ namespace Reactivities.Photos
 
         public PhotoAccessor(IOptions<CloudinarySettings> config)
         {
-            //Here I'm [Creating] an [Account]. This [has to be] in this [Order]
-            //I will [Get] the [Values] from the [Website] [Cloudinary]
             var account = new Account(
                 config.Value.CloudName,
                 config.Value.ApiKey,
@@ -27,7 +25,6 @@ namespace Reactivities.Photos
 
         public async Task<PhotoUploadResult> AddPhoto(IFormFile file)
         {
-            //The [OpenReadStream()] will Implament the [Dispose Methood] So that the [using] will [Dispose] of the [Resources] beign [used here]
             if (file.Length > 0)
             {
                 await using var stream = file.OpenReadStream();
@@ -36,7 +33,6 @@ namespace Reactivities.Photos
                 {
                     File = new FileDescription(file.FileName, stream),
 
-                    //This is to let [Cloudinary] [Transform] the [Image] into [Square]
                     Transformation = new Transformation().Height(500).Width(500).Crop("fill")
                 };
 

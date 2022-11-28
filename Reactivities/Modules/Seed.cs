@@ -12,7 +12,6 @@ namespace Reactivitiess.Modules
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
-            //This will [check] if there are any [users] [already] in our [DataBase]. [If there isn't any] it will [execute the code] in the [if statement]
             if (!userManager.Users.Any() && !context.Activities.Any())
             {
                 var users = new List<AppUser>
@@ -37,8 +36,6 @@ namespace Reactivitiess.Modules
                     },
                 };
 
-                //Then [here] [we gonna] [Add] [each] [user] inside the [users List]
-                //We Don't need to do [context.SaveChangesAsync()] in the end, [Because] The [CreateAsync] gonna [Create] the [user] [directly] in the [DataBase] and [Save]
                 foreach (var user in users)
                 {
                     await userManager.CreateAsync(user, "Pa$$w0rd");

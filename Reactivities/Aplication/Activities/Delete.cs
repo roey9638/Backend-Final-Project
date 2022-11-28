@@ -42,7 +42,7 @@ namespace Reactivities.Aplication.Activities
                     Result<Unit>.Failure("Failed to delete the activity");
                 }
 
-                return Result<Unit>.Success(Unit.Value); //This is like [returning] [Nothing]
+                return Result<Unit>.Success(Unit.Value); 
             }
         }
     }

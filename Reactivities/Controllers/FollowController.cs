@@ -13,6 +13,7 @@ namespace Reactivities.Controllers
             return HandleResult(await Mediator.Send(new FollowToggle.Command { TargetUsername = username }));
         }
 
+
         [HttpGet("{username}")]
         public async Task<IActionResult> GetFollowings(string username, string predicate)
         {
